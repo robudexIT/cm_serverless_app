@@ -18,20 +18,14 @@ DB_PASSWORD = os.environ['DB_PASSWORD']
 DB_NAME = os.environ['DB_NAME']
 
 
-# Connect to the database
-connection = pymysql.connect(host= DB_HOST,
-                             user= DB_USER,
-                             password=DB_PASSWORD,
-                             database=DB_NAME,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+
 
 while True:
     try:
-        connection = pymysql.connect(host='sbtphdb.cp6wc0kiikqz.us-east-1.rds.amazonaws.com',
-                             user='sbtphadmin',
-                             password='Kk0UyyRgFOQpehXBtGx6',
-                             database='sbtphdb',
+        connection = pymysql.connect(host=DB_HOST,
+                             user=DB_USER,
+                             password=DB_PASSWORD,
+                             database=DB_NAME,
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
         cursor = connection.cursor()
