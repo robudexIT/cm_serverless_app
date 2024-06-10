@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
-import database 
-import auth
+from config import database 
+from utils import auth
 
 # import requests
 
