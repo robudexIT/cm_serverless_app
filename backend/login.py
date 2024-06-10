@@ -4,8 +4,8 @@ import bcrypt
 import os
 from jose import jwt
 from dotenv import load_dotenv
-from config import database 
-from utils import auth
+import config.database as database 
+import utils.auth as auth
 from datetime import datetime, timedelta
 
 
