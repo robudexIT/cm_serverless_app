@@ -12,7 +12,7 @@ Globals:
     MemorySize: 128
     Environment:
       Variables:
-        DB_HOST: 167.71.22.129
+        DB_HOST: 172.17.0.1
         DB_PORT: 3306
         DB_NAME: sbtphdb
         DB_USER: sbtphadmin
