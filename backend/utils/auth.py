@@ -1,7 +1,7 @@
 from jose import jwt, JWTError 
 import os
 from dotenv import load_dotenv
-import database 
+import config.database as database
 from datetime import datetime, timedelta
 
 #Load environment variable from .env file
