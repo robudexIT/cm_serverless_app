@@ -1,20 +1,31 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  sbtph_serverless_api
+  sbtph_api
 
-  Sample SAM Template for sbtph_serverless_api
+  Sample SAM Template for sbtph_api
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
     Timeout: 3
+    MemorySize: 128
+    Environment:
+      Variables:
+        DB_HOST: localhost
+        DB_PORT: 3306
+        DB_NAME: sbtphdb
+        DB_USER: sbtphadmin
+        DB_PASSWORD: Kk0UyyRgFOQpehXBtGx6
+        SECRET_KEY: 6d6bdbc3239ec3f8f0eadcee0633b49597df5956ac46735a23e822964c04f0b8
+        ALGORITHM: HS256
+        ACCESS_TOKEN_EXPIRE_MINUTES: 30  
 
 Resources:
   HelloWorldFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: hello_world/
+      CodeUri: backend/
       Handler: app.lambda_handler
       Runtime: python3.10
       Architectures:
@@ -25,6 +36,41 @@ Resources:
           Properties:
             Path: /hello
             Method: get
+            
+  LoginFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: backend/
+      Handler: login.lambda_handler
+      Runtime: python3.10
+      
+      Architectures:
+        - x86_64
+      Events:
+        HelloWorld:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /login
+            Method: post
+            
+  CsdInboundCallSummaryFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: backend/
+      Handler: get_csd_inbound_call_summary.lambda_handler
+      Runtime: python3.10
+      
+      Architectures:
+        - x86_64
+      Events:
+        HelloWorld:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /csdinbound/get_csd_inbound_call_summary
+            Method: get
+            
+                       
+                      
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
@@ -32,7 +78,7 @@ Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   HelloWorldApi:
     Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
   HelloWorldFunction:
     Description: "Hello World Lambda Function ARN"
     Value: !GetAtt HelloWorldFunction.Arn

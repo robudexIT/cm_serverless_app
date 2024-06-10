@@ -1,0 +1,5 @@
+requests
+bcrypt 
+pymysql
+python-jose
+python-dotenv
