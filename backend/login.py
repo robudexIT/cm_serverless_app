@@ -25,11 +25,12 @@ def lambda_handler(event, context):
         body = json.loads(event['body'])
         extension = body['extension']
         secret = body['secret']
+       
         
-        cursor.execute("SELECT * FROM login WHERE extension=%s ", (extension))
+        cursor.execute("SELECT * FROM login WHERE extension=%s ", (extension,))
         
         user = cursor.fetchone()
-        
+      
         if user and user['secret'] == secret:
         
             payload = {
@@ -54,7 +55,7 @@ def lambda_handler(event, context):
         
     except Exception as e:
         return {
-            "statusCode": 500,
+            "statusCode":  500,
             'body': json.dumps(f'Error: {str(e)}')
         }
 

@@ -2,6 +2,7 @@ import pymysql
 import pymysql.cursors
 import time
 import os
+import mysql.connector
 from dotenv import load_dotenv
 
 
@@ -17,27 +18,45 @@ DB_USER = os.environ['DB_USER']
 DB_PASSWORD = os.environ['DB_PASSWORD']
 DB_NAME = os.environ['DB_NAME']
 
-
-
-
 while True:
     try:
-        connection = pymysql.connect(host=DB_HOST,
-                             user=DB_USER,
-                             password=DB_PASSWORD,
-                             database=DB_NAME,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
-        cursor = connection.cursor()
-        print('Connecting to database is successful')
+        connection = mysql.connector.connect(
+            host = DB_HOST ,
+            user= DB_USER,
+            password = DB_PASSWORD ,
+            database = DB_NAME 
+        )
+        cursor = connection.cursor(dictionary=True)
+        print("Connecting to databse is successful")
+       
         break
-    
     except Exception as error:
-        print('Connection to database is failed')
+        print("Connection to database is failed")
         print("Error", error)
-        time.sleep(5)
-        
-        
+        time.sleep(5) 
+
 def connectDB():
-    return {"connection": connection, "cursor": cursor}
+    return {"connection": connection, "cursor": cursor}         
+
+
+# while True:
+#     try:
+#         connection = pymysql.connect(host=DB_HOST,
+#                              user=DB_USER,
+#                              password=DB_PASSWORD,
+#                              database=DB_NAME,
+#                              charset='utf8mb4',
+#                              cursorclass=pymysql.cursors.DictCursor)
+#         cursor = connection.cursor()
+#         print('Connecting to database is successful')
+#         break
+    
+#     except Exception as error:
+#         print('Connection to database is failed')
+#         print("Error", error)
+#         time.sleep(5)
+        
+        
+# def connectDB():
+#     return {"connection": connection, "cursor": cursor}
         

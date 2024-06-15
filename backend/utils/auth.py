@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import config.database as database
 from datetime import datetime, timedelta
 
+
 #Load environment variable from .env file
 load_dotenv()
 
@@ -42,11 +43,14 @@ def verify_access_token(headers):
             data = payload.get("data")
             
             if data['extension'] is None:
-                return False
+                return False 
+            
+            # Another Check to be implemented here!! check the extension if present in the database..
+            
             
             return True    
         else:
             return False
         
     except JWTError :
-        raise Exception("Could not validate credentials")
+        raise Exception({"message":"Could Not Validate", "http_status_code":500})

@@ -8,16 +8,18 @@
       "cookie2"
     ],
     "headers": {
-      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImV4dGVuc2lvbiI6IjYzMzYiLCJuYW1lIjoiUm9nbWVyIEJ1bGFjbGFjIiwicG9zaXRpb24iOiI5OSJ9LCJleHAiOjE3MTgzMTI1NjR9.7pU-V1hH7YqOpFkUuKHIBMxLr-P4TdE6DEJsgMQN-ow",
+      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImV4dGVuc2lvbiI6IjYzMzYiLCJuYW1lIjoiUm9nbWVyIEJ1bGFjbGFjIiwicG9zaXRpb24iOiI5OSJ9LCJleHAiOjE3MTgzMjAyNjN9.u129K2HNn9g_CyZ8j8oueKzBExi4_0A4TtrDHEVh9Ko",
       "Accept": "application/json",
       "Content-Type": "application/json"
     },
     "queryStringParameters": {
-        "startdate": "2024-05-06",
+        "startdate": "2024-05-01",
         "enddate": "2024-05-30",
         "tagname": "all",
-        "duration": 0,
-        "direction": "UP"
+        "extension": "2033",
+        "name": "BAKTYGUL"
+
+      
     },
     "requestContext": {
       "accountId": "123456789012",
@@ -63,8 +65,7 @@
     },
     "body": "{\"extension\": \"6336\", \"secret\": \"20006336\"}",
     "pathParameters": {
-      "parameter1": "value1",
-      "callsummaries": "collection"
+      "calldetails": "csdinbounddetails"
     },
     "isBase64Encoded": true,
     "stageVariables": {
