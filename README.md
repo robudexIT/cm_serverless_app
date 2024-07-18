@@ -1,130 +1,454 @@
-# sbtph_serverless_api
+# CDR MONITORING APP (SERVERLESS) AWS SAM PROJECT..
 
-This project contains source code and supporting files for a serverless application that you can deploy with the SAM CLI. It includes the following files and folders.
+This project is inspired by one of the project samples I found in the AWS Samples GitHub repository. The link is [
+aws-devops-end-to-end-workshop](https://github.com/aws-samples/aws-devops-end-to-end-workshop).
 
-- hello_world - Code for the application's Lambda function.
-- events - Invocation events that you can use to invoke the function.
-- tests - Unit tests for the application code. 
-- template.yaml - A template that defines the application's AWS resources.
+This project is an end-to-end workshop and a great resource for learning the DevOps approach on AWS. I haven't yet done it, but I think it's awesome, and I will definitely build it in the near future. As part of my learning DevOps and coding skills, I will build my own project on-premise, which will be quite similar to this project, and then turn it into a serverless architecture.
 
-The application uses several AWS resources, including Lambda functions and an API Gateway API. These resources are defined in the `template.yaml` file in this project. You can update the template to add AWS resources through the same deployment process that updates your application code.
+## ON Premise project app.
 
-If you prefer to use an integrated development environment (IDE) to build and test your application, you can use the AWS Toolkit.  
-The AWS Toolkit is an open source plug-in for popular IDEs that uses the SAM CLI to build and deploy serverless applications on AWS. The AWS Toolkit also adds a simplified step-through debugging experience for Lambda function code. See the following links to get started.
+**Achitecture**
 
-* [CLion](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [GoLand](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [IntelliJ](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [WebStorm](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [Rider](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [PhpStorm](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [PyCharm](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [RubyMine](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [DataGrip](https://docs.aws.amazon.com/toolkit-for-jetbrains/latest/userguide/welcome.html)
-* [VS Code](https://docs.aws.amazon.com/toolkit-for-vscode/latest/userguide/welcome.html)
-* [Visual Studio](https://docs.aws.amazon.com/toolkit-for-visual-studio/latest/user-guide/welcome.html)
+![OnpremArch](images/callmonitoring_app_onprem.png)
 
-## Deploy the sample application
+**Technologies Used**
+- Frontend --> VUEJS Framework.
+- Backend/API  --> PHP 
+- Authentication --> JWT TOKEN
+- Database --> Mysql
 
-The Serverless Application Model Command Line Interface (SAM CLI) is an extension of the AWS CLI that adds functionality for building and testing Lambda applications. It uses Docker to run your functions in an Amazon Linux environment that matches Lambda. It can also emulate your application's build environment and API.
 
-To use the SAM CLI, you need the following tools.
+## AWS Serverless project app.
 
-* SAM CLI - [Install the SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
-* [Python 3 installed](https://www.python.org/downloads/)
-* Docker - [Install Docker community edition](https://hub.docker.com/search/?type=edition&offering=community)
+**Architecture**
 
-To build and deploy your application for the first time, run the following in your shell:
+![ServerlessArch](images/callmonitoring_app_serverless.png)
 
+**Technologies Used**
+- Frontend --> S3 Static Website (Build using VUEJS)
+- Backend --> AWS Lambda 
+- API --> API Gateway 
+- Database --> RDS Mysql
+- Authentication -->  JWT TOKEN
+
+__**Note two way to implement authentication using jwt on API gateway or in Lambda. In this project is choose to implement this in lamba**__
+
+
+## Project Implementation and Walkthrough 
+
+For this project, I anticipate building numerous Lambda functions and API Gateway resources within it. Creating these manually is both cumbersome and error-prone. Fortunately, I can utilize AWS CloudFormation for this purpose, although even with CloudFormation's power, the setup process can still be challenging. Thankfully, I discovered AWS SAM, which seems well-suited for this project. Now, I just need to learn how to use it effectively.
+
+I searched for tutorials and found the best one in the AWS Samples GitHub repositories. You can find it at [aws-serverless-workshops](https://github.com/aws-samples/aws-serverless-workshops/tree/master/DevOps)
+
+
+**AWS SAM Commands Used in This Project**:
+- sam init: Initialize a new serverless application project.
+- sam build: Build your serverless application.
+- sam local invoke: Invoke your Lambda functions locally.
+- sam local start-api: Start a local API Gateway for testing your functions locally.
+- sam deploy: Deploy your serverless application to AWS.
+- sam delete: Delete resources created by the deployment.
+
+
+**Initialize project**
 ```bash
-sam build --use-container
-sam deploy --guided
+   sam init
 ```
+__For the options, I just followed the option on the aws-serverless-workshops__
 
-The first command will build the source of your application. The second command will package and deploy your application to AWS, with a series of prompts:
 
-* **Stack Name**: The name of the stack to deploy to CloudFormation. This should be unique to your account and region, and a good starting point would be something matching your project name.
-* **AWS Region**: The AWS region you want to deploy your app to.
-* **Confirm changes before deploy**: If set to yes, any change sets will be shown to you before execution for manual review. If set to no, the AWS SAM CLI will automatically deploy application changes.
-* **Allow SAM CLI IAM role creation**: Many AWS SAM templates, including this example, create AWS IAM roles required for the AWS Lambda function(s) included to access AWS services. By default, these are scoped down to minimum required permissions. To deploy an AWS CloudFormation stack which creates or modifies IAM roles, the `CAPABILITY_IAM` value for `capabilities` must be provided. If permission isn't provided through this prompt, to deploy this example you must explicitly pass `--capabilities CAPABILITY_IAM` to the `sam deploy` command.
-* **Save arguments to samconfig.toml**: If set to yes, your choices will be saved to a configuration file inside the project, so that in the future you can just re-run `sam deploy` without parameters to deploy changes to your application.
-
-You can find your API Gateway Endpoint URL in the output values displayed after deployment.
-
-## Use the SAM CLI to build and test locally
-
-Build your application with the `sam build --use-container` command.
-
-```bash
-sbtph_serverless_api$ sam build --use-container
-```
-
-The SAM CLI installs dependencies defined in `hello_world/requirements.txt`, creates a deployment package, and saves it in the `.aws-sam/build` folder.
-
-Test a single function by invoking it directly with a test event. An event is a JSON document that represents the input that the function receives from the event source. Test events are included in the `events` folder in this project.
-
-Run functions locally and invoke them with the `sam local invoke` command.
-
-```bash
-sbtph_serverless_api$ sam local invoke HelloWorldFunction --event events/event.json
-```
-
-The SAM CLI can also emulate your application's API. Use the `sam local start-api` to run the API locally on port 3000.
-
-```bash
-sbtph_serverless_api$ sam local start-api
-sbtph_serverless_api$ curl http://localhost:3000/
-```
-
-The SAM CLI reads the application template to determine the API's routes and the functions that they invoke. The `Events` property on each function's definition includes the route and method for each path.
+**Configuring template.yaml file and creating lambda functions**
 
 ```yaml
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sbtph_api
+
+  Sample SAM Template for sbtph_api
+
+
+Resources:
+  SBTPHWebSiteBucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - BucketKeyEnabled: true
+      VersioningConfiguration:
+        Status: Enabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: index.html
+
+  SBTPHWebSiteBucketPolicy:
+    Type: "AWS::S3::BucketPolicy"
+    Properties:
+      Bucket: !Ref SBTPHWebSiteBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: "AllowPublicRead"
+            Effect: "Allow"
+            Principal: "*"
+            Action: "s3:GetObject"
+            Resource: !Join
+              - ''
+              - - "arn:aws:s3:::"
+                - !Ref SBTPHWebSiteBucket
+                - /*
+
+
+  MyApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Cors:
+        AllowMethods: "'GET,POST,OPTIONS,DELETE,PUT'"
+        AllowHeaders: "'Content-Type,Authorization,X-Forwarded-For'"
+        AllowOrigin: "'*'"        
+
+  LoginFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/
+      Handler: login.lambda_handler
+      Runtime: python3.10
+      Architectures:
+        - x86_64
       Events:
-        HelloWorld:
+        Login:
           Type: Api
           Properties:
-            Path: /hello
+            RestApiId: !Ref MyApi
+            Path: /api/login
+            Method: post
+            
+  CallSummaryFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/
+      Handler: call_summary.lambda_handler
+      Runtime: python3.10
+      Architectures:
+        - x86_64
+      Events:
+        GetCallSummary:
+          Type: Api
+          Properties:
+            Path: /api/callsummaries/{callsummaries}
+            RestApiId: !Ref MyApi
             Method: get
+      
+  CallDetailsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/
+      Handler: call_details.lambda_handler
+      Runtime: python3.10
+      Architectures:
+        - x86_64
+      Events:
+        GetCallDetails:
+          Type: Api
+          Properties:
+            Path: /api/calldetails/{calldetails}
+            RestApiId: !Ref MyApi
+            Method: get
+
+  SeachNumberFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/
+      Handler: search_number.lambda_handler
+      Runtime: python3.10
+      Architectures:
+        - x86_64
+      Events:
+        GetSearchNumber:
+          Type: Api
+          Properties:
+            Path: /api/searchnumber/{search_type}
+            RestApiId: !Ref MyApi
+            Method: get    
+
+  AgentFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/
+      Handler: agents.lambda_handler
+      Runtime: python3.10
+      Architectures:
+        - x86_64
+      Events:
+        GetAgentsInboundGroup:
+          Type: Api
+          Properties:
+            Path: /api/agents/csd/agentphonelogsdetails
+            RestApiId: !Ref MyApi
+            Method: get
+
+        GetAgentsInboundGroupDetails:
+          Type: Api
+          Properties:
+            Path: /api/agents/csd/inbound_group
+            RestApiId: !Ref MyApi
+            Method: get
+
+        GetAgent:
+          Type: Api
+          Properties:
+            Path: /api/agents/{agent_type}/{extension}
+            RestApiId: !Ref MyApi
+            Method: get
+
+        CreateAgent:
+          Type: Api
+          Properties:
+            Path: /api/agents/{agent_type}
+            RestApiId: !Ref MyApi
+            Method: post
+
+        UpdateAgent:
+          Type: Api
+          Properties:
+            Path: /api/agents/{agent_type}
+            RestApiId: !Ref MyApi
+            Method: put
+
+        DeleteAgent:
+          Type: Api
+          Properties:
+            Path: /api/agents/{agent_type}/{extension}
+            RestApiId: !Ref MyApi
+            Method: delete
+
+        GetAgents:
+          Type: Api
+          Properties:
+            Path: /api/agents/{agent_type}
+            RestApiId: !Ref MyApi
+            Method: get
+            
+  GetCountsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/
+      Handler: counts.lambda_handler
+      Runtime: python3.10
+      Architectures:
+        - x86_64
+      Events:
+        GetCounts:
+          Type: Api
+          Properties:
+            Path: /api/getcounts/{count}
+            RestApiId: !Ref MyApi
+            Method: get
+               
+  TagFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/
+      Handler: tag.lambda_handler
+      Runtime: python3.10
+      Architectures:
+        - x86_64
+      Events:              
+        GetTags:
+          Type: Api
+          Properties:
+            Path: /api/tags
+            RestApiId: !Ref MyApi
+            Method: get  
+        CreateTag:
+          Type: Api
+          Properties:
+            Path: /api/tags/{tagtype}
+            RestApiId: !Ref MyApi
+            Method: post                                                   
+        DeleteAgent:
+          Type: Api
+          Properties:
+            Path: /api/tags
+            RestApiId: !Ref MyApi
+            Method: delete             
+
+  MetricsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/
+      Handler: metrics.lambda_handler
+      Runtime: python3.10
+      Architectures:
+        - x86_64
+      Events:
+        GetMetrics:
+          Type: Api
+          Properties:
+            Path: /api/getmetrics
+            RestApiId: !Ref MyApi
+            Method: get
+
+  CdrFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/
+      Handler: cdrs.lambda_handler
+      Runtime: python3.10
+      Architectures:
+        - x86_64
+      Events:
+        UpdateCdr:
+          Type: Api
+          Properties:
+            Path: /api/cdr/{cdrtype}
+            RestApiId: !Ref MyApi
+            Method: post              
+        GetCdr:
+          Type: Api
+          Properties:
+            Path: /api/cdr/{cdrtype}
+            RestApiId: !Ref MyApi
+            Method: get           
+        DeleteCdr:
+          Type: Api
+          Properties:
+            Path: /api/cdr/{cdrtype}
+            RestApiId: !Ref MyApi
+            Method: delete                                                   
+
+Outputs:
+  ApiUrl:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${MyApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
+    Export:
+      Name: ApiUrl
+  SBTPHWebSiteBucket:
+    Description: "Frontend Bucket"
+    Value: !Ref SBTPHWebSiteBucket
+
 ```
 
-## Add a resource to your application
-The application template uses AWS Serverless Application Model (AWS SAM) to define application resources. AWS SAM is an extension of AWS CloudFormation with a simpler syntax for configuring common serverless application resources such as functions, triggers, and APIs. For resources not included in [the SAM specification](https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md), you can use standard [AWS CloudFormation](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html) resource types.
+For my Lambda functions, since PHP is not yet available as a runtime, I converted the code to Python3. The code can be found in the backend folder.
 
-## Fetch, tail, and filter Lambda function logs
 
-To simplify troubleshooting, SAM CLI has a command called `sam logs`. `sam logs` lets you fetch logs generated by your deployed Lambda function from the command line. In addition to printing the logs on the terminal, this command has several nifty features to help you quickly find the bug.
+My Vue.js code for the frontend is also ready, but before deploying it to S3 as a static website, we need to test it locally. Our API and Lambda functions also need to be tested locally before we can deploy them to the cloud.. 
 
-`NOTE`: This command works for all AWS Lambda functions; not just the ones you deploy using SAM.
+**For AWS SAM local testing, additional requirements must be installed on your local machine.**
+- docker engine/docker desktop
+- your chossen runtime (in my case I used python3 on my backend and nodejs 16.x for my frontend)
+- Mysql Database
+
+Once all the additional requirements are installed, I proceed with the following steps:
+- Restore my database on my local database
+```bash
+   mysql -u yourusername -p -e "CREATE DATABASE sbtphdb;" && mysql -u yourusername -p sbtphdb < sbtph.sql
+```
+- I cd (change directory) to the backend folder, create a requirements.txt file, paste all the required modules/libraries into it, and then install them using pip install -r requirements.txt.
+  
+```bash
+   pip install -r requirements.txt
+```
+
+- I updated the template.yaml by adding the following configuration below the Resources section. This configuration contains the credentials for the local MySQL database and settings for JWT tokens.
+
+```yaml
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 256
+    Environment:
+      Variables:
+        DB_HOST: 167.71.22.129
+        DB_PORT: 3306
+        DB_NAME: sbtphdb
+        DB_USER: sbtphadmin
+        DB_PASSWORD: Kk0UyyRgFOQpehXBtGx6
+        SECRET_KEY: 6d6bdbc3239ec3f8f0eadcee0633b49597df5956ac46735a23e822964c04f0b8
+        ALGORITHM: HS256
+        ACCESS_TOKEN_EXPIRE_MINUTES: 30 
+   
+```
+
+- Once everything is set up, I run the following commands in the terminal:
+```bash
+   sam build 
+   sam local invoke start-api --host 0.0.0.0 #listen to all ip address of my machine.
+
+```
+
+**Local Backend is now running and listen to port 3000**
+
+![localbackend_running](images/backend_start_running.png)
+
+- Our API/backend is now ready. It's time to fire up the frontend. Open a new terminal, cd to the frontend folder, and run npm install --save to install all the dependencies.
 
 ```bash
-sbtph_serverless_api$ sam logs -n HelloWorldFunction --stack-name "sbtph_serverless_api" --tail
+   npm install --save-dev
 ```
 
-You can find more information and examples about filtering Lambda function logs in the [SAM CLI Documentation](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-logging.html).
+- Edit the src/api_awssam.js file and update the HTTPADDR variable with the address where your API is listening (e.g., http://167.71.22.129:3000). Be sure to suffix it with /api (e.g., http://167.71.22.129:3000/api).
 
-## Tests
-
-Tests are defined in the `tests` folder in this project. Use PIP to install the test dependencies and run tests.
+- Run npm run serve 
 
 ```bash
-sbtph_serverless_api$ pip install -r tests/requirements.txt --user
-# unit test
-sbtph_serverless_api$ python -m pytest tests/unit -v
-# integration test, requiring deploying the stack first.
-# Create the env variable AWS_SAM_STACK_NAME with the name of the stack we are testing
-sbtph_serverless_api$ AWS_SAM_STACK_NAME="sbtph_serverless_api" python -m pytest tests/integration -v
+   npm run serve
 ```
 
-## Cleanup
+**Frontend is running as well.**
+![frontend_running](images/running_local_frontend.png)
 
-To delete the sample application that you created, use the AWS CLI. Assuming you used your project name for the stack name, you can run the following:
 
-```bash
-sam delete --stack-name "sbtph_serverless_api"
-```
+**Time to test it.**
 
-## Resources
+- Open the browser and copy frontend ip address and login (extension: 6336, secret: 20006336)
 
-See the [AWS SAM developer guide](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html) for an introduction to SAM specification, the SAM CLI, and serverless application concepts.
+![login_page](images/loginpage_local.png)
 
-Next, you can use AWS Serverless Application Repository to deploy ready to use Apps that go beyond hello world samples and learn how authors developed their applications: [AWS Serverless Application Repository main page](https://aws.amazon.com/serverless/serverlessrepo/)
+
+![success_login](images/login_sucess.png)
+
+- Our Backend logs also that is successfully generate  jwt token
+
+![jwt_token_generate](images/backend_generate_token.png)
+
+
+- Let Generates some cdr metrics 
+
+![metrics_one](images/metrics1_local.png)
+
+![metrics_two](images/metrics2_local.png)
+
+- Our Backend is successfully reacted as well
+
+![metrics_backend](images/backend_start_running.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,38 @@
+#!/root/ansible/myansible/bin/ansible-playbook
+- name: Ansible Block
+  hosts: vsftp
+  remote_user: root
+
+  tasks:
+    - block:
+       - name: install vsftp
+         apt: 
+           name: vsftp
+           state: latest
+       - name: take backup of existing config
+         copy:
+          src: /etc/vsftp.conf 
+          dest: /etc/vsftp.conf.backup
+         remote_src: yes
+       - name: Fail intensionally
+         command: "rm -f vsftp.conf"
+
+       - name: Start vsftp
+         service:
+           name: vsftpd
+           state: started
+
+    - rescue:
+        - name: Restore backup
+          copy:
+            src: /etc/vsftpd.conf.backup
+            dest: /etc/vsftpd.conf 
+          remote_src: yes     
+
+    - always: 
+       - name: Restart vsftpd
+         service:
+           name: vsftpd
+           state: restarted
+    
+

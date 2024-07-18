@@ -1,0 +1,45 @@
+curl -X GET "http://127.0.0.1:3000/callsummaries/csdinbound?startdate=2024-06-19&enddate=2024-06-19&tagname=all" \
+     -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImV4dGVuc2lvbiI6IjYzMzYiLCJuYW1lIjoiUm9nbWVyIEJ1bGFjbGFjIiwicG9zaXRpb24iOiI5OSJ9LCJleHAiOjE3MTg3NzcyMDJ9.jMFpBTB_6nzIfvZdB7wKH_IwylXZY51U07pooqmsdoE" \
+     -H "Content-Type: application/json"
+
+
+curl -X GET "http://127.0.0.1:3000/callsummaries/csdinbound" \
+     -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImV4dGVuc2lvbiI6IjYzMzYiLCJuYW1lIjoiUm9nbWVyIEJ1bGFjbGFjIiwicG9zaXRpb24iOiI5OSJ9LCJleHAiOjE3MTg3NzcyMDJ9.jMFpBTB_6nzIfvZdB7wKH_IwylXZY51U07pooqmsdoE" \
+     -H "Content-Type: application/json"   
+
+     ?startdate=2024-05-01&enddate=2024-05-30&tagname=all 
+     
+     
+    ?startdate=2024-05-01&enddate=2024-05-30&tagname=all&direction=UP&duration=0  
+
+
+
+
+tag metrics  result 
+{
+     "DROPPED CALL (MEMBER)":{"May-2024":1343,"June-2024":834},
+     "MISSEDCALLS":{"May-2024":123,"June-2024":66},
+     "CAR INQUIRY (REGISTERED)":{"May-2024":37,"June-2024":24},
+     "DROPPED CALL (NON MEMBER)":{"May-2024":618,"June-2024":382},
+     "SALES ASSISTANCE":{"May-2024":267,"June-2024":163},
+     "CUSTOMER ACCOUNT CONCERN":{"May-2024":4,"June-2024":2},
+     "CAR INQUIRY (UNREGISTERED)":{"May-2024":20,"June-2024":10},
+     "INVOICE":{"May-2024":11,"June-2024":8},
+     "PAYMENT UPDATE":{"May-2024":20,"June-2024":15},
+     "AMENDMENT":{"May-2024":6,"June-2024":0},
+     "OTHERS (NOT RELATED TO SBT TRANSACTION)":{"May-2024":22,"June-2024":17},
+     "PAYMENT PROBLEM":{"May-2024":6,"June-2024":7},
+     "CALL BACK REQUEST":{"May-2024":15,"June-2024":23},
+     "SHIPMENT":{"May-2024":9,"June-2024":8},
+     "COURIER":{"May-2024":1,"June-2024":0},
+     "CAR CONCERN\/STATUS":{"May-2024":11,"June-2024":6},
+     "DOCUMENTS":{"May-2024":7,"June-2024":11},
+     "PAYMENT REFUND":{"May-2024":3,
+     "June-2024":1},"RELEASE":{"May-2024":9,"June-2024":2},
+     "THIRD PARTY CUSTOMER CAR CONCERN":{"May-2024":2,"June-2024":0},
+     "NO TAG":{"May-2024":4,"June-2024":11},"COMPLAINTS":{"May-2024":4,"June-2024":5},
+     "CONSIGNEE":{"May-2024":0,"June-2024":0},
+     "option_metrics":"tag","option":"csdinbound","total_records":4137,
+     "dateRange":"2024-05-01 17:57:00 To 2024-06-22 17:57:00"
+
+}

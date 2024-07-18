@@ -5,100 +5,282 @@ Description: >
 
   Sample SAM Template for sbtph_api
 
-# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
     Timeout: 30
-    MemorySize: 128
+    MemorySize: 256
     Environment:
       Variables:
-        DB_HOST: 172.17.0.1
+        DB_HOST: 167.71.22.129
         DB_PORT: 3306
         DB_NAME: sbtphdb
         DB_USER: sbtphadmin
         DB_PASSWORD: Kk0UyyRgFOQpehXBtGx6
         SECRET_KEY: 6d6bdbc3239ec3f8f0eadcee0633b49597df5956ac46735a23e822964c04f0b8
         ALGORITHM: HS256
-        ACCESS_TOKEN_EXPIRE_MINUTES: 120  
+        ACCESS_TOKEN_EXPIRE_MINUTES: 30 
 
 Resources:
-  HelloWorldFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+  SBTPHWebSiteBucket:
+    Type: "AWS::S3::Bucket"
     Properties:
-      CodeUri: backend/
-      Handler: app.lambda_handler
-      Runtime: python3.10
-      Architectures:
-        - x86_64
-      Events:
-        HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-          Properties:
-            Path: /{hello}
-            Method: get
-            
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - BucketKeyEnabled: true
+      VersioningConfiguration:
+        Status: Enabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: index.html
+
+  SBTPHWebSiteBucketPolicy:
+    Type: "AWS::S3::BucketPolicy"
+    Properties:
+      Bucket: !Ref SBTPHWebSiteBucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: "AllowPublicRead"
+            Effect: "Allow"
+            Principal: "*"
+            Action: "s3:GetObject"
+            Resource: !Join
+              - ''
+              - - "arn:aws:s3:::"
+                - !Ref SBTPHWebSiteBucket
+                - /*
+
+
+  MyApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Cors:
+        AllowMethods: "'GET,POST,OPTIONS,DELETE,PUT'"
+        AllowHeaders: "'Content-Type,Authorization,X-Forwarded-For'"
+        AllowOrigin: "'*'"        
+
   LoginFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: backend/
       Handler: login.lambda_handler
       Runtime: python3.10
-      
       Architectures:
         - x86_64
       Events:
-        HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+        Login:
+          Type: Api
           Properties:
-            Path: /login
+            RestApiId: !Ref MyApi
+            Path: /api/login
             Method: post
             
   CallSummaryFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: backend/
-      Handler: get_call_summary.lambda_handler
+      Handler: call_summary.lambda_handler
       Runtime: python3.10
-      
       Architectures:
         - x86_64
       Events:
-        HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+        GetCallSummary:
+          Type: Api
           Properties:
-            Path: /callsummaries/{callsummaries}
+            Path: /api/callsummaries/{callsummaries}
+            RestApiId: !Ref MyApi
+            Method: get
+      
+  CallDetailsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/
+      Handler: call_details.lambda_handler
+      Runtime: python3.10
+      Architectures:
+        - x86_64
+      Events:
+        GetCallDetails:
+          Type: Api
+          Properties:
+            Path: /api/calldetails/{calldetails}
+            RestApiId: !Ref MyApi
             Method: get
 
-  CallDetailsFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+  SeachNumberFunction:
+    Type: AWS::Serverless::Function
     Properties:
       CodeUri: backend/
-      Handler: get_call_details.lambda_handler
+      Handler: search_number.lambda_handler
       Runtime: python3.10
-      
       Architectures:
         - x86_64
       Events:
-        HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+        GetSearchNumber:
+          Type: Api
           Properties:
-            Path: /calldetails/{calldetails}
+            Path: /api/searchnumber/{search_type}
+            RestApiId: !Ref MyApi
+            Method: get    
+
+  AgentFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/
+      Handler: agents.lambda_handler
+      Runtime: python3.10
+      Architectures:
+        - x86_64
+      Events:
+        GetAgentsInboundGroup:
+          Type: Api
+          Properties:
+            Path: /api/agents/csd/agentphonelogsdetails
+            RestApiId: !Ref MyApi
             Method: get
-                      
+
+        GetAgentsInboundGroupDetails:
+          Type: Api
+          Properties:
+            Path: /api/agents/csd/inbound_group
+            RestApiId: !Ref MyApi
+            Method: get
+
+        GetAgent:
+          Type: Api
+          Properties:
+            Path: /api/agents/{agent_type}/{extension}
+            RestApiId: !Ref MyApi
+            Method: get
+
+        CreateAgent:
+          Type: Api
+          Properties:
+            Path: /api/agents/{agent_type}
+            RestApiId: !Ref MyApi
+            Method: post
+
+        UpdateAgent:
+          Type: Api
+          Properties:
+            Path: /api/agents/{agent_type}
+            RestApiId: !Ref MyApi
+            Method: put
+
+        DeleteAgent:
+          Type: Api
+          Properties:
+            Path: /api/agents/{agent_type}/{extension}
+            RestApiId: !Ref MyApi
+            Method: delete
+
+        GetAgents:
+          Type: Api
+          Properties:
+            Path: /api/agents/{agent_type}
+            RestApiId: !Ref MyApi
+            Method: get
             
-                       
-                      
+  GetCountsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/
+      Handler: counts.lambda_handler
+      Runtime: python3.10
+      Architectures:
+        - x86_64
+      Events:
+        GetCounts:
+          Type: Api
+          Properties:
+            Path: /api/getcounts/{count}
+            RestApiId: !Ref MyApi
+            Method: get
+               
+  TagFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/
+      Handler: tag.lambda_handler
+      Runtime: python3.10
+      Architectures:
+        - x86_64
+      Events:              
+        GetTags:
+          Type: Api
+          Properties:
+            Path: /api/tags
+            RestApiId: !Ref MyApi
+            Method: get  
+        CreateTag:
+          Type: Api
+          Properties:
+            Path: /api/tags/{tagtype}
+            RestApiId: !Ref MyApi
+            Method: post                                                   
+        DeleteAgent:
+          Type: Api
+          Properties:
+            Path: /api/tags
+            RestApiId: !Ref MyApi
+            Method: delete             
+
+  MetricsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/
+      Handler: metrics.lambda_handler
+      Runtime: python3.10
+      Architectures:
+        - x86_64
+      Events:
+        GetMetrics:
+          Type: Api
+          Properties:
+            Path: /api/getmetrics
+            RestApiId: !Ref MyApi
+            Method: get
+
+  CdrFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: backend/
+      Handler: cdrs.lambda_handler
+      Runtime: python3.10
+      Architectures:
+        - x86_64
+      Events:
+        UpdateCdr:
+          Type: Api
+          Properties:
+            Path: /api/cdr/{cdrtype}
+            RestApiId: !Ref MyApi
+            Method: post              
+        GetCdr:
+          Type: Api
+          Properties:
+            Path: /api/cdr/{cdrtype}
+            RestApiId: !Ref MyApi
+            Method: get           
+        DeleteCdr:
+          Type: Api
+          Properties:
+            Path: /api/cdr/{cdrtype}
+            RestApiId: !Ref MyApi
+            Method: delete                                                   
 
 Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  HelloWorldApi:
-    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
-  HelloWorldFunction:
-    Description: "Hello World Lambda Function ARN"
-    Value: !GetAtt HelloWorldFunction.Arn
-  HelloWorldFunctionIamRole:
-    Description: "Implicit IAM Role created for Hello World function"
-    Value: !GetAtt HelloWorldFunctionRole.Arn
+  ApiUrl:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${MyApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
+    Export:
+      Name: ApiUrl
+  SBTPHWebSiteBucket:
+    Description: "Frontend Bucket"
+    Value: !Ref SBTPHWebSiteBucket

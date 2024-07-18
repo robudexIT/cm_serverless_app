@@ -8,7 +8,7 @@
       "cookie2"
     ],
     "headers": {
-      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImV4dGVuc2lvbiI6IjYzMzYiLCJuYW1lIjoiUm9nbWVyIEJ1bGFjbGFjIiwicG9zaXRpb24iOiI5OSJ9LCJleHAiOjE3MTgzMTI1NjR9.7pU-V1hH7YqOpFkUuKHIBMxLr-P4TdE6DEJsgMQN-ow",
+      "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImV4dGVuc2lvbiI6IjYzMzYiLCJuYW1lIjoiUm9nbWVyIEJ1bGFjbGFjIiwicG9zaXRpb24iOiI5OSJ9LCJleHAiOjE3MTg3ODQ3ODZ9._-SrditTmxgmDNpnfmE0a6ijClM8DhPW7WRlmmNBHkk",
       "Accept": "application/json",
       "Content-Type": "application/json"
     },
@@ -18,6 +18,7 @@
         "tagname": "all",
         "duration": 0,
         "direction": "UP"
+
     },
     "requestContext": {
       "accountId": "123456789012",
@@ -64,7 +65,7 @@
     "body": "{\"extension\": \"6336\", \"secret\": \"20006336\"}",
     "pathParameters": {
       "parameter1": "value1",
-      "callsummaries": "collection"
+      "callsummaries": "csdinbound"
     },
     "isBase64Encoded": true,
     "stageVariables": {

@@ -1,0 +1,36 @@
+{
+  "name": "vue-first-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/vue-fontawesome": "^3.0.0-5",
+    "@popperjs/core": "^2.10.1",
+    "bootstrap": "^5.1.1",
+    "core-js": "^3.6.5",
+    "vue": "^3.0.0",
+    "vue-ctk-date-time-picker": "^2.5.0",
+    "vue-router": "^4.0.11",
+    "vue3-date-time-picker": "^2.1.7",
+    "vuejs-datetimepicker": "^1.1.13",
+    "vuex": "^4.0.2"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0-0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-vue": "^9.27.0"
+  },
+  "rules": {
+    "no-console": 0
+  }
+}
