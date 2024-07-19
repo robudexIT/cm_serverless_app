@@ -348,8 +348,12 @@ My Vue.js code for the frontend is also ready, but before deploying it to S3 as 
 Once all the additional requirements are installed, I proceed with the following steps:
 - Restore my database on my local database
 ```bash
-   mysql -u yourusername -p -e "CREATE DATABASE sbtphdb;" && mysql -u yourusername -p sbtphdb < sbtph.sql
+   mysql -u robudexadmin -p -e "CREATE DATABASE cmdb;" && mysql -u robudexadmin -p cmdb < db.sql
 ```
+__Where my mysqluser = 'robudexadmin', and  database_name = 'cmdb'__ 
+
+__Note that all customer/client numbers have been changed for security purposes. (All numbers are fake.)__
+
 - I cd (change directory) to the backend folder, create a requirements.txt file, paste all the required modules/libraries into it, and then install them using pip install -r requirements.txt.
   
 ```bash
@@ -368,8 +372,8 @@ Globals:
       Variables:
         DB_HOST: 167.71.22.129
         DB_PORT: 3306
-        DB_NAME: sbtphdb
-        DB_USER: sbtphadmin
+        DB_NAME: cmdb
+        DB_USER: robudexadmin
         DB_PASSWORD: Kk0UyyRgFOQpehXBtGx6
         SECRET_KEY: 6d6bdbc3239ec3f8f0eadcee0633b49597df5956ac46735a23e822964c04f0b8
         ALGORITHM: HS256
@@ -408,7 +412,7 @@ Globals:
 
 **Time to test it.**
 
-- Open the browser and copy frontend ip address and login (extension: 6336, secret: 20006336)
+- Open the browser, copy the frontend IP address, and log in using the extension 6336 and the secret 20006336
 
 ![login_page](images/loginpage_local.png)
 
@@ -420,15 +424,70 @@ Globals:
 ![jwt_token_generate](images/backend_generate_token.png)
 
 
-- Let Generates some cdr metrics 
+- Let's Generates some cdr metrics 
 
 ![metrics_one](images/metrics1_local.png)
 
 ![metrics_two](images/metrics2_local.png)
 
-- Our Backend is successfully reacted as well
+- Our backend has also responded successfully.
 
 ![metrics_backend](images/backend_start_running.png)
+
+
+## Deploy in AWS CLOUD.
+
+Now that local testing is successful, it's time to deploy to the cloud. But first, we need to start the RDS database instance and update our template.yaml file.
+
+**RDS Instance and SG Settings:**
+![rds_instance](images/rds_instance_settings.png)
+
+![rds_sg_inbound](images/rds_sg.png)
+
+
+- Please note that in this project, I set my RDS instance to be publicly accessible ('Yes') because my Lambda function is not in a VPC. However, for best practices, always set public accessibility to 'No' and place the Lambda function inside the VPC.
+
+- I also configured the security group to allow any IPv4 access on port 3306 because Lambda functions do not have static public IP addresses, which makes it challenging to whitelist a specific IP. But again, this is not a best practice. **Putting the Lambda function in the same VPC as the RDS instance is still the best practice.**
+
+
+**Connect to RDS Instance and Restore**
+
+```bash
+   mysql -urobudexadmin -h cmdb.cp6wc0kiikqz.us-east-1.rds.amazonaws.com  cmdb -p < db.sql #restore the db
+   mysql -urobudexadmin  --database cmdb  -h cmdb.cp6wc0kiikqz.us-east-1.rds.amazonaws.com -p #Connect to db instance
+```
+
+![check_restore_db](images/restore_and_check.png)
+
+
+- Update the template.yaml to the new db settings. Where 'cmdb.cp6wc0kiikqz.us-east-1.rds.amazonaws.com' is my  rds endpoint.
+
+```yaml
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 256
+    Environment:
+      Variables:
+        DB_HOST: cmdb.cp6wc0kiikqz.us-east-1.rds.amazonaws.com
+        DB_PORT: 3306
+        DB_NAME: cmdb
+        DB_USER: robudexadmin
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
