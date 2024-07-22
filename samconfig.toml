@@ -17,7 +17,7 @@ lint = true
 capabilities = "CAPABILITY_IAM"
 confirm_changeset = true
 resolve_s3 = true
-s3_prefix = "ServerlessCompanionStack"
+s3_prefix = "serverlessApiCompanionStack"
 region = "us-east-1"
 image_repositories = []
 

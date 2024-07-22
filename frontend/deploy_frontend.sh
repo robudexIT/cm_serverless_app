@@ -38,6 +38,7 @@ npm run build && cd dist/
 # Sync distribution with S3
 aws s3 sync . s3://$s3_bucket_name/cm_app/
 
+
 # Create cloudfront invalidation and capture id for next step
 #invalidation_output=$(aws cloudfront create-invalidation --distribution-id $cloudfront_distribution_id --paths "/*")
 #invalidation_id=$(echo "$invalidation_output" | grep -oP '(?<="Id": ")[^"]+')

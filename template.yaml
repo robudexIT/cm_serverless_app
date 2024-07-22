@@ -11,10 +11,10 @@ Globals:
     MemorySize: 256
     Environment:
       Variables:
-        DB_HOST: 167.71.22.129
+        DB_HOST: cmdb.cp6wc0kiikqz.us-east-1.rds.amazonaws.com
         DB_PORT: 3306
-        DB_NAME: sbtphdb
-        DB_USER: sbtphadmin
+        DB_NAME: cmdb
+        DB_USER: robudexadmin
         DB_PASSWORD: Kk0UyyRgFOQpehXBtGx6
         SECRET_KEY: 6d6bdbc3239ec3f8f0eadcee0633b49597df5956ac46735a23e822964c04f0b8
         ALGORITHM: HS256

@@ -476,6 +476,50 @@ Globals:
 
 ```
 
+**Time to deploy our servless app to the cloud**
+
+- Since we updated our template.yaml file with the new database configuration, we need to rebuild our project using **sam build**.
+
+```bash
+   sam build
+```
+
+- After the build, we can issue **sam deploy --guided** to deploy it to the AWS Cloud. This will require you to answer a series of questions pertaining to your app's specifications.
+
+```bash
+   sam deploy --guided
+```
+
+![samdeploy_guided_questions](images/samdeploy_guided_questions.png)
+
+
+- **sam deploy** will handle the configuration setup. Press 'y' to deploy this changeset.
+
+
+![samdeploy_changeset](images/samdeploy_changeset.png)
+
+- Wait until the deployment finishes and take note of the output, as we will use this value in our frontend.
+
+
+![samdeploy_output](images/samdeploy_output.png)
+
+
+- You can verify also, in AWS Console 
+
+**Cloudformation**
+
+![samdeploy_cf](images/sam_deploy_cf_success.png)
+
+**Lambda**
+
+![samdeploy_lambda](images/samdeploy_lambda_resources.png)
+
+**API Gateway**
+
+![samdeploy_api_gateway](images/samdeploy_api_gateway_resource.png)
+
+
+
 
 
 
