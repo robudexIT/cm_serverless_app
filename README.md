@@ -5,6 +5,7 @@ aws-devops-end-to-end-workshop](https://github.com/aws-samples/aws-devops-end-to
 
 This project is an end-to-end workshop and a great resource for learning the DevOps approach on AWS. I haven't yet done it, but I think it's awesome, and I will definitely build it in the near future. As part of my learning DevOps and coding skills, I will build my own project on-premise, which will be quite similar to this project, and then turn it into a serverless architecture.
 
+
 ## ON Premise project app.
 
 **Achitecture**
@@ -32,6 +33,8 @@ This project is an end-to-end workshop and a great resource for learning the Dev
 - Authentication -->  JWT TOKEN
 
 __**Note two way to implement authentication using jwt on API gateway or in Lambda. In this project is choose to implement this in lamba**__
+
+__**The data (CDR) comes from the Asterisk server. When a customer calls or an agent makes an outbound call, the CDR (Call Detail Record) is automatically saved to the database at the end of each call.**_
 
 
 ## Project Implementation and Walkthrough 
@@ -517,6 +520,66 @@ Globals:
 **API Gateway**
 
 ![samdeploy_api_gateway](images/samdeploy_api_gateway_resource.png)
+
+
+**Next is Deploy the frontend to S3 as Static Website**
+
+- Update the frontend/src/api_awssam.js file with your API endpoint, as shown in the output from sam deploy. Append '/api' to the end of the endpoint.
+
+```js
+  const HTTPADDR =  "https://zmvk3tmbxe.execute-api.us-east-1.amazonaws.com/Prod/api"  
+```
+
+
+- In the frontend folder, locate deploy_frontend.sh, make the file executable, and then run the script.
+
+```bash
+   chmod +x deploy_frontend.sh
+   ./deploy_frontend.sh 
+```
+
+- Enter your CloudFormation stack name, press Enter, and wait for the script to finish.
+
+
+- deploy_frontend.sh will build the Vue.js frontend app and upload it to the S3 bucket specified in your template.yaml file. In my case, the bucket name is 'serverlessapicompanionstack-sbtphwebsitebucket-3qqy8cf8c66u'. From your AWS Console, go to S3 and find your bucket. Under 'Properties', copy the bucket website endpoint. Paste this into your web browser, add '/cm_app' at the end, and press Enter.
+
+
+
+
+![app_on_aws_serverless](images/samdeploy_api_gateway_resource.png)
+
+
+- Login to app (extension: 6336,secret : 20006336) and test the app.
+
+
+![app_login_page_aws.png](images/app_login_page_aws.png)
+
+
+![generate_metrics_aws.png](images/generate_metrics_aws.png)
+
+
+![generate_metrics2_aws.png](images/generate_metrics2_aws.png)
+
+
+
+**This is the end of the project**
+
+
+## Important Note
+- In this project, I deployed manually using **sam deploy --guided**.
+- Next, I plan to add **CI/CD** to automate the deployment process.
+- While **S3 Static Website hosting** is convenient, it is not secure by default. Adding **CloudFront** is a good option to improve security and performance.
+- Consider exploring and integrating **AWS Cognito** for authentication to enhance user management and security.
+
+
+
+
+
+
+
+
+
+
 
 
 
