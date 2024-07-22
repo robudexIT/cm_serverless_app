@@ -1,7 +1,4 @@
-
-
-const  HTTPADDR = 'http://167.71.22.129:3000/api' //process.env.VUE_APP_HTTPADDR_AWSSAM
-
+const HTTPADDR = `${process.env.VUE_APP_API_ENDPOINT}/api`   
 
 const API = {
    login: `${HTTPADDR}/login`,
@@ -66,3 +63,5 @@ export default API
 
 // const HTTPADDR = `${process.env.VUE_APP_API_ENDPOINT}/api`    //'https://z5hj7lt6bd.execute-api.us-east-1.amazonaws.com/Prod/api'
 // const  HTTPADDR = 'https://z5hj7lt6bd.execute-api.us-east-1.amazonaws.com/Prod/api'
+
+// const  HTTPADDR = 'http://167.71.22.129:3000/api' //process.env.VUE_APP_HTTPADDR_AWSSAM
