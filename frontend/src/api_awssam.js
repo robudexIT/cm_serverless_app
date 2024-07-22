@@ -1,4 +1,6 @@
-const HTTPADDR = `${process.env.VUE_APP_API_ENDPOINT}/api`   
+
+
+const HTTPADDR = "https://zmvk3tmbxe.execute-api.us-east-1.amazonaws.com/Prod/api"
 
 const API = {
    login: `${HTTPADDR}/login`,
